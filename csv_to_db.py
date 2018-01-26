@@ -1,6 +1,6 @@
 import sqlite3 as db
 
-class Main_table:
+class MainTable:
 	def __init__(self):
 		self.conn = db.connect("gpa.db")
 
@@ -15,7 +15,7 @@ class Main_table:
 				`course_code`	TEXT NOT NULL,
 				`grade`	REAL NOT NULL
 			);
-		''')
+		''')	
 		conn.commit()
 
 	def select_all(self):
