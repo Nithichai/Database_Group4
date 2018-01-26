@@ -8,12 +8,12 @@ class Main_table:
 		# create table
 		c = conn.cursor()
 		c.execute('''
-			CREATE TABLE `main` (
+			CREATE TABLE `main_table` (
 				`student_id`	TEXT NOT NULL,
 				`year`	INTEGER NOT NULL,
 				`semester`	INTEGER NOT NULL,
 				`course_code`	TEXT NOT NULL,
-				`grade`	TEXT NOT NULL
+				`grade`	REAL NOT NULL
 			);
 		''')
 		conn.commit()
