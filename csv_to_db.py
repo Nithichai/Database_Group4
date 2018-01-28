@@ -15,7 +15,7 @@ class MainTable:
 				`course_code`	TEXT NOT NULL,
 				`grade`	REAL NOT NULL
 			);
-		''')	
+		''')
 		conn.commit()
 
 	def select_all(self):
