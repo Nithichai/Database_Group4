@@ -4,20 +4,6 @@ class MainTable:
 	def __init__(self):
 		self.conn = db.connect("gpa.db")
 
-	def create_table(self):
-		# create table
-		c = conn.cursor()
-		c.execute('''
-			CREATE TABLE `main_table` (
-				`student_id`	TEXT NOT NULL,
-				`year`	INTEGER NOT NULL,
-				`semester`	INTEGER NOT NULL,
-				`course_code`	TEXT NOT NULL,
-				`grade`	REAL NOT NULL
-			);
-		''')
-		conn.commit()
-
 	def select_all(self):
 		# return list of all elements
 		pass
