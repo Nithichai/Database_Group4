@@ -1,4 +1,5 @@
 import sqlite3 as db
+import os
 import csv
 
 class Main_table:
@@ -53,13 +54,20 @@ class Main_table:
 
 main_TB = Main_table()
 
-file_name = 'Nop.csv'
+file_list = []
 
-with open(file_name, 'r') as csv_file:
-        csv_reader = csv.reader(csv_file, delimiter=',')
-        for row in csv_reader:
-                #print(row)
-                main_TB.insert(row)        
+for (dirpath, dirnames, filenames) in os.walk('.'):
+        file_list.extend(filenames)
+        break
+
+csv_file_list = [file for file in file_list if file.endswith('.csv')]
+
+for file in csv_file_list:
+        print('reading file:', file)
+        with open(file, 'r') as csv_file:
+                csv_reader = csv.reader(csv_file, delimiter=',')
+                for row in csv_reader:
+                        main_TB.insert(row)
 
 # x=Main_table()
 # x.insert(['5801012610075',2015,1,'055012','3.5'])
