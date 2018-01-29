@@ -35,6 +35,9 @@ class MainTable:
 				print (data)
 				print (e)
 
+	def import_csv(self):
+		pass
+
 	def update(self, data):
 		con = self.conn
 		with con:
