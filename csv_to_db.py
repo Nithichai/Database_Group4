@@ -59,9 +59,13 @@ class MainTable:
 				print (e)
 
 	def delete(self, data):
-		# input : list of header and data
-		# return status
-		pass
+		con = self.conn
+		with con:
+		    cur = con.cursor()
+		    try:
+		        cur.execute("DELETE FROM " + self.table + " WHERE student_id = ? AND course_code = ? ", data)
+		    except Exception as e:
+		        print (e)
 
 ################
 # read csv and insert to db here
