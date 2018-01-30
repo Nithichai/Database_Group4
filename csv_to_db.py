@@ -2,17 +2,28 @@ import sqlite3 as db
 import os
 import csv
 
+# Class for manage main table
 class MainTable:
-	def __init__(self, database):
-		self.conn = db.connect(database)
-		self.table = "Main"
 
+	# init by connect to db and set table name
+    # parameter : database file name
+    # return : none
+	def __init__(self, database):
+		self.table = "Main"
+		self.conn = db.connect(database)
+
+	# select all main table
+    # parameter : none
+    # return : list of value in main table
 	def select_all(self):
 		con = self.conn
 		cur = con.cursor()
 		cur.execute("SELECT * FROM " + self.table)
 		return cur.fetchall()
 
+	# show all value from main table
+	# parameter : none
+	# return : none
 	def show_all(self):
 		list_main = self.select_all()
 		print("==========================")
@@ -24,17 +35,23 @@ class MainTable:
 			print("grade_char : %s" % data[4])
 			print("==========================")
 
+	# insert value into table
+	# parameter : list [student_id, year, semester, course_code, grade]
+	# return : none
 	def insert(self, data):
 		con = self.conn
 		with con:
 			cur = con.cursor()
 			try:
 				cur.execute("PRAGMA foreign_keys = ON")
-				cur.execute("INSERT INTO " + self.table + " VALUES (?,?,?,?,?)",data)
+				cur.execute("INSERT INTO " + self.table + " VALUES (?,?,?,?,?)", data)
 			except Exception as e:
 				print (data)
 				print (e)
 
+	# import all csv file in folder into table
+	# parameter : none
+	# return : none
 	def import_csv(self):
 		file_list = []
 		for (dirpath, dirnames, filenames) in os.walk('.'):
@@ -48,6 +65,9 @@ class MainTable:
 		                for row in csv_reader:
 		                        self.insert(row)
 
+	# update value in table that ref by student_id and course_code
+	# parameter : list [grade, student_id, course_code]
+	# return : none
 	def update(self, data):
 		con = self.conn
 		with con:
@@ -58,6 +78,9 @@ class MainTable:
 				print (data)
 				print (e)
 
+	# delete value in table that ref by student_id and course_code
+	# parameter : list [student_id, course_code]
+	# return : none
 	def delete(self, data):
 		con = self.conn
 		with con:
