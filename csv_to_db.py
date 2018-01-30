@@ -36,7 +36,17 @@ class MainTable:
 				print (e)
 
 	def import_csv(self):
-		pass
+		file_list = []
+		for (dirpath, dirnames, filenames) in os.walk('.'):
+			file_list.extend(filenames)
+			break
+		csv_file_list = [file for file in file_list if file.endswith('.csv')]
+		for file in csv_file_list:
+		        print('reading file:', file)
+		        with open(file, 'r') as csv_file:
+		                csv_reader = csv.reader(csv_file, delimiter=',')
+		                for row in csv_reader:
+		                        self.insert(row)
 
 	def update(self, data):
 		con = self.conn
@@ -57,15 +67,4 @@ class MainTable:
 # read csv and insert to db here
 ################
 main_TB = MainTable("KMUTNBdb.db")
-print main_TB.update(["B+", "5801012620046", "010123101"])
-# file_list = []
-# for (dirpath, dirnames, filenames) in os.walk('.'):
-#         file_list.extend(filenames)
-#         break
-# csv_file_list = [file for file in file_list if file.endswith('.csv')]
-# for file in csv_file_list:
-#         print('reading file:', file)
-#         with open(file, 'r') as csv_file:
-#                 csv_reader = csv.reader(csv_file, delimiter=',')
-#                 for row in csv_reader:
-#                         main_TB.insert(row)
+main_TB.import_csv()
