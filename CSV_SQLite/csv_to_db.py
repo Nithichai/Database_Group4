@@ -94,4 +94,4 @@ class MainTable:
 # read csv and insert to db here
 ################
 main_TB = MainTable("KMUTNBdb.db")
-main_TB.import_csv()
+main_TB.delete(["5801012620046", "010123114"])
