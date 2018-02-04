@@ -12,6 +12,9 @@ class MainTable:
 		self.fb = firebase.FirebaseApplication('https://nithichaisoftwareengkmutnb.firebaseio.com/', None)
 		self.index = 0
 
+	# insert value into table
+	# parameter : uri, list [student_id, year, semester, course_code, grade]
+	# return : none
 	def insert(self, uri, data):
 		data_set = {
 			"student_id" : data[0],
@@ -23,8 +26,7 @@ class MainTable:
 		try:
 			result = self.fb.put(url=uri, name=self.index, data=data_set)
 		except Exception as e:
-			# print(e)
-			pass
+			print(e)
 
 	# import all csv file in folder into table
 	# parameter : none
