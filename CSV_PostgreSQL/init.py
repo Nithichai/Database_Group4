@@ -23,14 +23,17 @@ class MainTable:
 		with con:
 			cur = con.cursor()
 			try:
+				# cur.execute("INSERT INTO " + \
+				# 	 self.table + \
+				# 	 " (student_id, year, semester, course_code, grade_char) VALUES ('" + \
+				# 	 str(data[0]) + "','" + \
+				# 	 str(data[1]) + "','" + \
+				# 	 str(data[2]) + "','" + \
+				# 	 str(data[3]) + "','" + \
+				# 	 str(data[4]) + "');")
 				cur.execute("INSERT INTO " + \
 					 self.table + \
-					 "(student_id, year, semester, course_code, grade_char) VALUES ('" + \
-					 str(data[0]) + "','" + \
-					 str(data[1]) + "','" + \
-					 str(data[2]) + "','" + \
-					 str(data[3]) + "','" + \
-					 str(data[4]) + "');")
+					 " (student_id, year, semester, course_code, grade_char) VALUES (%s,%s,%s,%s,%s)", data)
 			except Exception as e:
 				print (data)
 				print (e)
