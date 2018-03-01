@@ -95,5 +95,3 @@ class MainTable:
 ################
 main_TB = MainTable("KMUTNBdb.db")
 main_TB.delete(["5801012620046", "010123114"])
-
-# test gitkraken
