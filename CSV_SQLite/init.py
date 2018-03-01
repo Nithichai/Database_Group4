@@ -91,6 +91,7 @@ def list_from_table(database, table, col):
     new_ls = []
     for l in ls:
         new_ls.append(l[0])
+    conn.close()
     return new_ls
 
 grade = list_from_table("Transcript.db", "Grade", "grade_char")
