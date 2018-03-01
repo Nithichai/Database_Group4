@@ -2,96 +2,154 @@ import sqlite3 as db
 import os
 import csv
 
-# Class for manage main table
-class MainTable:
-
-    # init by connect to db and set table name
-    # parameter : database file name
-    # return : none
-    def __init__(self, database):
-        self.table = "Main"
+class Transcript:
+    def __init__(self, database, table):
         self.conn = db.connect(database)
+        self.table = table
+        self.cur = self.conn.cursor()
 
-    # select all main table
-    # parameter : none
-    # return : list of value in main table
+    def close(self):
+        self.conn.close()
+
+    def create_table(self):
+        pass
+
+    def open_foreign_key(self):
+        self.cur.execute("PRAGMA foreign_keys = ON")
+
+    # [student_id, year, semester, course_code, grade_char]
+    def insert(self, data):
+        try:
+            self.cur.execute("INSERT INTO " + self.table + " VALUES (?,?,?,?,?)", data)
+        except Exception as e:
+            print("You have error : '%s' : %s" %(str(e), str(data)))
+
     def select_all(self):
-        con = self.conn
-        cur = con.cursor()
-        cur.execute("SELECT * FROM " + self.table)
-        return cur.fetchall()
+        self.cur.execute("SELECT * FROM " + self.table)
+        return self.cur.fetchall()
 
-    # show all value from main table
-    # parameter : none
-    # return : none
+    def select_column(self, col):
+        self.cur.execute("SELECT " + col + " FROM " + self.table)
+        return self.cur.fetchall()
+
     def show_all(self):
         list_main = self.select_all()
         print("==========================")
         for data in list_main:
             print("student_id : %s" % data[0])
             print("year : %s" % data[1])
-            print("semester : %s" % data[2])
+            print("semester : %s" % data[2]) 
             print("couser_code : %s" % data[3])
             print("grade_char : %s" % data[4])
             print("==========================")
 
-    # insert value into table
-    # parameter : list [student_id, year, semester, course_code, grade]
-    # return : none
-    def insert(self, data):
-        con = self.conn
-        with con:
-            cur = con.cursor()
-            try:
-                cur.execute("PRAGMA foreign_keys = ON")
-                cur.execute("INSERT INTO " + self.table + " VALUES (?,?,?,?,?)", data)
-            except Exception as e:
-                print (data)
-                print (e)
+    def show_col(self, col):
+        list_main = self.select_column(col)
+        print("==========================")
+        for data in list_main:
+            print("student_id : %s" % data[0])
 
-    # import all csv file in folder into table
-    # parameter : none
-    # return : none
-    def import_csv(self):
-        file_list = []
-        for (dirpath, dirnames, filenames) in os.walk('.'):
-            file_list.extend(filenames)
-            break
-        csv_file_list = [file for file in file_list if file.endswith('.csv')]
-        for file in csv_file_list:
-                print('reading file:', file)
-                with open(file, 'r') as csv_file:
-                        csv_reader = csv.reader(csv_file, delimiter=',')
-                        for row in csv_reader:
-                                self.insert(row)
+    def commit(self):
+        self.conn.commit()
 
-    # update value in table that ref by student_id and course_code
-    # parameter : list [grade, student_id, course_code]
-    # return : none
-    def update(self, data):
-        con = self.conn
-        with con:
-            cur = con.cursor()
-            try:
-                cur.execute("UPDATE "+ self.table + " SET grade_char = ? WHERE student_id = ? AND course_code = ?", data)
-            except Exception as e:
-                print (data)
-                print (e)
+transcript = Transcript("Transcripts.db", "transcript")
 
-    # delete value in table that ref by student_id and course_code
-    # parameter : list [student_id, course_code]
-    # return : none
-    def delete(self, data):
-        con = self.conn
-        with con:
-            cur = con.cursor()
-            try:
-                cur.execute("DELETE FROM " + self.table + " WHERE student_id = ? AND course_code = ? ", data)
-            except Exception as e:
-                print (e)
 
-################
-# read csv and insert to db here
-################
-main_TB = MainTable("KMUTNBdb.db")
-main_TB.delete(["5801012620046", "010123114"])
+# main_TB = MainTable("KMUTNBdb.db")
+# main_TB.delete(["5801012620046", "010123114"])
+
+
+
+# # Class for manage main table
+# class MainTable:
+
+#     # init by connect to db and set table name
+#     # parameter : database file name
+#     # return : none
+#     def __init__(self, database):
+#         self.table = "Main"
+#         self.conn = db.connect(database)
+
+#     # select all main table
+#     # parameter : none
+#     # return : list of value in main table
+#     def select_all(self):
+#         con = self.conn
+#         cur = con.cursor()
+#         cur.execute("SELECT * FROM " + self.table)
+#         return cur.fetchall()
+
+#     # show all value from main table
+#     # parameter : none
+#     # return : none
+#     def show_all(self):
+#         list_main = self.select_all()
+#         print("==========================")
+#         for data in list_main:
+#             print("student_id : %s" % data[0])
+#             print("year : %s" % data[1])
+#             print("semester : %s" % data[2])
+#             print("couser_code : %s" % data[3])
+#             print("grade_char : %s" % data[4])
+#             print("==========================")
+
+#     # insert value into table
+#     # parameter : list [student_id, year, semester, course_code, grade]
+#     # return : none
+#     def insert(self, data):
+#         con = self.conn
+#         with con:
+#             cur = con.cursor()
+#             try:
+#                 cur.execute("PRAGMA foreign_keys = ON")
+#                 cur.execute("INSERT INTO " + self.table + " VALUES (?,?,?,?,?)", data)
+#             except Exception as e:
+#                 print (data)
+#                 print (e)
+
+#     # import all csv file in folder into table
+#     # parameter : none
+#     # return : none
+#     def import_csv(self):
+#         file_list = []
+#         for (dirpath, dirnames, filenames) in os.walk('.'):
+#             file_list.extend(filenames)
+#             break
+#         csv_file_list = [file for file in file_list if file.endswith('.csv')]
+#         for file in csv_file_list:
+#                 print('reading file:', file)
+#                 with open(file, 'r') as csv_file:
+#                         csv_reader = csv.reader(csv_file, delimiter=',')
+#                         for row in csv_reader:
+#                                 self.insert(row)
+
+#     # update value in table that ref by student_id and course_code
+#     # parameter : list [grade, student_id, course_code]
+#     # return : none
+#     def update(self, data):
+#         con = self.conn
+#         with con:
+#             cur = con.cursor()
+#             try:
+#                 cur.execute("UPDATE "+ self.table + " SET grade_char = ? WHERE student_id = ? AND course_code = ?", data)
+#             except Exception as e:
+#                 print (data)
+#                 print (e)
+
+#     # delete value in table that ref by student_id and course_code
+#     # parameter : list [student_id, course_code]
+#     # return : none
+#     def delete(self, data):
+#         con = self.conn
+#         with con:
+#             cur = con.cursor()
+#             try:
+#                 cur.execute("DELETE FROM " + self.table + " WHERE student_id = ? AND course_code = ? ", data)
+#             except Exception as e:
+#                 print (e)
+
+# ################
+# # read csv and insert to db here
+# ################
+# main_TB = MainTable("KMUTNBdb.db")
+# main_TB.delete(["5801012620046", "010123114"])
