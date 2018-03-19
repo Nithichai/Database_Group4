@@ -1,6 +1,8 @@
 import psycopg2
 import os
 import csv
+import time
+import random
 
 # Class for manage main table
 class Transcript:
@@ -49,7 +51,7 @@ class Transcript:
     # return : none
     def insert(self, data):
         try:
-            self.cur.execute("INSERT INTO " + self.table + "(student_id, year, semester, course_code, grade_char) VALUES (?,?,?,?,?)", data)
+            self.cur.execute("INSERT INTO " + self.table + "(student_id, year, semester, course_code, grade_char) VALUES (%s,%s,%s,%s,%s)", data)
         except Exception as e:
             print("You have error : '%s' : %s" %(str(e), str(data)))
 

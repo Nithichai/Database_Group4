@@ -76,16 +76,15 @@ class Transcript:
 # dump table in database into list
 # parameter : database file name, table name, column
 # return : list of data
-def list_from_table(self, user, password, host, database, table, col):
-    self.conn = mysql.connector.connect(user=user, password=password, host=host, database=database)
+def list_from_table(user, password, host, database, table, col):
+    conn = mysql.connector.connect(user=user, password=password, host=host, database=database)
     ls = []
-    with conn:
-        cur = conn.cursor()
-        try:
-            cur.execute("SELECT " + col + " FROM " + table)
-            ls = cur.fetchall()
-        except Exception as e:
-            print("You have error : '%s'" % str(e))
+    cur = conn.cursor()
+    try:
+        cur.execute("SELECT " + col + " FROM " + table)
+        ls = cur.fetchall()
+    except Exception as e:
+        print("You have error : '%s'" % str(e))
     new_ls = []
     for l in ls:
         new_ls.append(l[0])
@@ -95,7 +94,7 @@ def list_from_table(self, user, password, host, database, table, col):
 user = "root"
 password = "qa987654"
 host = "localhost"
-database = "Transcripts"
+database = "transcripts"
 
 grade = list_from_table(user, password, host, database, "grade", "grade_char")
 student = list_from_table(user, password, host, database, "student", "student_id")
@@ -105,20 +104,21 @@ semester = [1, 2]
 
 transcript = Transcript(user, password, host, database, "transcript")
 n = input("Number of data : ")
+file = open("time_insert.txt", "a+")
 
 start_t = time.time()
 
 for i in range(int(n)):
     transcript.insert([random.choice(student), random.choice(year), random.choice(semester), random.choice(subject), random.choice(grade)])
     if i % 1000 == 0:
-        transcript.commit()
         print("at %s use time %s" % (str(i), str(time.time() - start_t)))
+    if i % 1000000 == 0:
+        file.write("Size : %s, Time : %s" % (i, str(time.time() - start_t)))
 transcript.commit()
 
 diff_t = time.time() - start_t
-transcript.close()
-
-file = open("time_insert.txt", "w+")
 file.write("Size : %s, Time : %s" % (n, str(diff_t)))
-file.close()
 print("at %s use time %s" % (str(n), str(time.time() - start_t)))
+
+file.close()
+transcript.close()

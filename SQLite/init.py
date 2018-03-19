@@ -108,11 +108,7 @@ n = input("Number of data : ")
 start_t = time.time()
 
 for i in range(int(n)):
-    transcript.insert([random.choice(student), \
-        random.choice(year), \
-        random.choice(semester), \
-        random.choice(subject), \
-        random.choice(grade)])
+    transcript.insert([random.choice(student), random.choice(year), random.choice(semester), random.choice(subject), random.choice(grade)])
     if i % 1000 == 0:
         print("at %s use time %s" % (str(i), str(time.time() - start_t)))
     if i % 1000000 == 0: 
