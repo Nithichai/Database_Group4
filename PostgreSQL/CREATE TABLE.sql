@@ -21,7 +21,7 @@ CREATE TABLE "subject" (
 );
 
 CREATE TABLE "transcript" (
-	`id`	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,
+	`id`	BIGSERIAL NOT NULL PRIMARY KEY UNIQUE,
 	`student_id`	TEXT,
 	`year`		INTEGER,
 	`semester`	INTEGER,
@@ -32,4 +32,4 @@ CREATE TABLE "transcript" (
 	FOREIGN KEY(`grade_char`) REFERENCES "grade"(`grade_char`)
 );
 
--- CREATE TABLE sqlite_sequence(name,seq);
+CREATE TABLE sqlite_sequence(name,seq);
