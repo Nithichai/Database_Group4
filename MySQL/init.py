@@ -9,8 +9,7 @@ class Transcript:
     # parameter : database file name, table name
     # return : none
     def __init__(self, user, password, host, database, table):
-        self.conn = mysql.connector.connect(user=user, password=password, \
-            host=host,database=database)
+        self.conn = mysql.connector.connect(user=user, password=password, host=host,database=database)
         self.table = table
         self.cur = self.conn.cursor()
 
@@ -47,17 +46,15 @@ class Transcript:
     # return : none
     def insert(self, data):
         try:
-            self.cur.execute("INSERT INTO " + self.table + \
-                "(student_id, year, semester, course_code, grade_char) \
-                VALUES (%s,%s,%s,%s,%s)", data)
+            self.cur.execute("INSERT INTO " + self.table + "(student_id, year, semester, course_code, grade_char) VALUES (%s,%s,%s,%s,%s)", data)
         except Exception as e:
             print("You have error : '%s' : %s" %(str(e), str(data)))
 
     # reconnect to db and set table name
     # parameter : database file name, table name
     # return : none
-    def reconnect(self, database, table):
-        self.conn = db.connect(database)
+    def reconnect(self, user, password, host, database, table):
+        self.conn = mysql.connector.connect(user=user, password=password, host=host,database=database)
         self.table = table
         self.cur = self.conn.cursor()
 
@@ -79,8 +76,8 @@ class Transcript:
 # dump table in database into list
 # parameter : database file name, table name, column
 # return : list of data
-def list_from_table(database, table, col):
-    conn = db.connect(database)
+def list_from_table(self, user, password, host, database, table, col):
+    self.conn = mysql.connector.connect(user=user, password=password, host=host, database=database)
     ls = []
     with conn:
         cur = conn.cursor()
@@ -95,25 +92,24 @@ def list_from_table(database, table, col):
     conn.close()
     return new_ls
 
-grade = list_from_table("Transcript.db", "Grade", "grade_char")
-student = list_from_table("Transcript.db", "Student", "student_id")
-subject = list_from_table("Transcript.db", "Subject", "course_code")
+user = "root"
+password = "qa987654"
+host = "localhost"
+database = "Transcripts"
+
+grade = list_from_table(user, password, host, database, "grade", "grade_char")
+student = list_from_table(user, password, host, database, "student", "student_id")
+subject = list_from_table(user, password, host, database, "subject", "course_code")
 year = [2015, 2016, 2017]
 semester = [1, 2]
 
-transcript = Transcript("Transcript.db", "Transcript")
+transcript = Transcript(user, password, host, database, "transcript")
 n = input("Number of data : ")
 
 start_t = time.time()
 
 for i in range(int(n)):
-    transcript.insert([ \
-        random.choice(student), \
-        random.choice(year), \
-        random.choice(semester), \
-        random.choice(subject), \
-        random.choice(grade) \
-    ])
+    transcript.insert([random.choice(student), random.choice(year), random.choice(semester), random.choice(subject), random.choice(grade)])
     if i % 1000 == 0:
         transcript.commit()
         print("at %s use time %s" % (str(i), str(time.time() - start_t)))

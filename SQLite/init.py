@@ -94,15 +94,17 @@ def list_from_table(database, table, col):
     conn.close()
     return new_ls
 
-grade = list_from_table("Transcript.db", "Grade", "grade_char")
-student = list_from_table("Transcript.db", "Student", "student_id")
-subject = list_from_table("Transcript.db", "Subject", "course_code")
+database = "Transcript.db"
+
+grade = list_from_table(database, "grade", "grade_char")
+student = list_from_table(database, "student", "student_id")
+subject = list_from_table(database, "subject", "course_code")
 year = [2015, 2016, 2017]
 semester = [1, 2]
+transcript = Transcript(database, "transcript")
 
-transcript = Transcript("Transcript.db", "Transcript")
+file = open("time_insert.txt", "w+")
 n = input("Number of data : ")
-
 start_t = time.time()
 
 for i in range(int(n)):
@@ -112,14 +114,14 @@ for i in range(int(n)):
         random.choice(subject), \
         random.choice(grade)])
     if i % 1000 == 0:
-        transcript.commit()
         print("at %s use time %s" % (str(i), str(time.time() - start_t)))
+    if i % 1000000 == 0: 
+        file.write("Size : %s, Time : %s" % (i, str(time.time() - start_t)))
 transcript.commit()
 
 diff_t = time.time() - start_t
-transcript.close()
-
-file = open("time_insert.txt", "w+")
+print("at %s use time %s" % (str(n), str(diff_t)))
 file.write("Size : %s, Time : %s" % (n, str(diff_t)))
+
+transcript.close()
 file.close()
-print("at %s use time %s" % (str(n), str(time.time() - start_t)))

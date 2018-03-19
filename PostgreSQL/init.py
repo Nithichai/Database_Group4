@@ -97,15 +97,20 @@ def list_from_table(dbname, user, host, password, table, col):
     conn.close()
     return new_ls
 
-grade = list_from_table('postgres', 'postgres', 'localhost', 'qa987654', 'public."grade"', 'grade_char')
-student = list_from_table('postgres', 'postgres', 'localhost', 'qa987654', 'public."student"', 'student_id')
-subject = list_from_table('postgres', 'postgres', 'localhost', 'qa987654', 'public."subject"', 'course_code')
+dbname = "postgres"
+user = "postgres"
+host = "localhost"
+password = "qa987654"
+
+grade = list_from_table(dbname, user, host, password, 'public."grade"', 'grade_char')
+student = list_from_table(dbname, user, host, password, 'public."student"', 'student_id')
+subject = list_from_table(dbname, user, host, password, 'public."subject"', 'course_code')
 year = [2015, 2016, 2017]
 semester = [1, 2]
-transcript = Transcript('postgres', 'postgres', 'localhost', 'qa987654', 'public."transcript"')
+transcript = Transcript(dbname, user, host, password, 'public."transcript"')
+
 file = open("time_insert.txt", "a+")
 n = input("Number of data : ")
-
 start_t = time.time()
 
 for i in range(int(n)):
